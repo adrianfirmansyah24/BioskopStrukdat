@@ -1,0 +1,10 @@
+=================================
+          CINEMATIX
+=================================
+
+ID Tiket : TKT1009
+Nama     : sofia
+Film     : Avengers%3A%20Doomsday
+Jadwal   : 10%3A00%20-%2012%3A30
+Studio   : Studio%201
+Kursi    : B7

@@ -1,0 +1,11 @@
+=================================
+       CINEMATIX RECEIPT
+=================================
+
+ID Tiket : TKT1008
+Nama     : sofia
+Film     : Avengers%3A%20Doomsday
+Kursi    : B6
+Harga    : Rp50000
+
+Status   : LUNAS

@@ -1,0 +1,3 @@
+1|~|Avengers: Doomsday|~|Action|~|10:00 - 12:30|~|Studio 1|~|50000
+2|~|Minecraft Movie|~|Adventure|~|13:00 - 15:00|~|Studio 2|~|45000
+3|~|Sinners|~|Horror|~|19:00 - 21:00|~|Studio 3|~|55000

@@ -1,0 +1,11 @@
+=================================
+       CINEMATIX RECEIPT
+=================================
+
+ID Tiket : TKT1002
+Nama     : adrian
+Film     : Avengers%3A%20Doomsday
+Kursi    : B4
+Harga    : Rp50000
+
+Status   : LUNAS

@@ -1,0 +1,11 @@
+=================================
+       CINEMATIX RECEIPT
+=================================
+
+ID Tiket : TKT1013
+Nama     : naura
+Film     : Minecraft%20Movie
+Kursi    : B5
+Harga    : Rp45000
+
+Status   : LUNAS

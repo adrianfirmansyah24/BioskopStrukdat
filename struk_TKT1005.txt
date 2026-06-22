@@ -1,0 +1,11 @@
+=================================
+       CINEMATIX RECEIPT
+=================================
+
+ID Tiket : TKT1005
+Nama     : rahmat
+Film     : Sinners
+Kursi    : D6
+Harga    : Rp55000
+
+Status   : LUNAS

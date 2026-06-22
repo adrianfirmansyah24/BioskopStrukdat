@@ -1,0 +1,10 @@
+=================================
+          CINEMATIX
+=================================
+
+ID Tiket : TKT1013
+Nama     : naura
+Film     : Minecraft%20Movie
+Jadwal   : 13%3A00%20-%2015%3A00
+Studio   : Studio%202
+Kursi    : B5

@@ -1,0 +1,10 @@
+=================================
+          CINEMATIX
+=================================
+
+ID Tiket : TKT1006
+Nama     : rahmat
+Film     : Sinners
+Jadwal   : 19%3A00%20-%2021%3A00
+Studio   : Studio%203
+Kursi    : D7

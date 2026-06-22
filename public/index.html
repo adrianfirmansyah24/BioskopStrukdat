@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cinematix — Book Your Seat</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <span class="logo">CINEMATIX</span>
+        <div class="nav-links">
+            <a href="#films">Films</a>
+            <a href="#booking">Booking</a>
+            <a href="#my-tickets">My Tickets</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero">
+        <div class="hero-text">
+            <p class="hero-eyebrow">Now Showing</p>
+            <h1>Your Seat.<br/>Your Movie.<br/>Your Night.</h1>
+            <a href="#films" class="btn-primary">Lihat Film</a>
+        </div>
+        <div class="hero-ticker">
+            <span>AVENGERS: DOOMSDAY &nbsp;✦&nbsp; MINECRAFT MOVIE &nbsp;✦&nbsp; SINNERS &nbsp;✦&nbsp; AVENGERS: DOOMSDAY &nbsp;✦&nbsp; MINECRAFT MOVIE &nbsp;✦&nbsp; SINNERS &nbsp;✦&nbsp;</span>
+        </div>
+    </header>
+
+    <!-- FILM LIST -->
+    <section id="films" class="section">
+        <h2 class="section-title">Film Tersedia</h2>
+        <div class="film-grid" id="film-grid"></div>
+    </section>
+
+    <!-- BOOKING FORM -->
+    <section id="booking" class="section section-dark">
+        <h2 class="section-title">Form Booking</h2>
+        <div class="form-card wide">
+
+            <!-- Step 1: Pilih Film -->
+            <div class="form-group">
+                <label>Pilih Film</label>
+                <select id="select-film">
+                    <option value="">-- Pilih Film --</option>
+                </select>
+            </div>
+
+            <!-- Film preview -->
+            <div class="film-info-preview" id="film-preview">
+                <p class="preview-placeholder">Pilih film untuk melihat detail & denah kursi.</p>
+            </div>
+
+            <!-- Step 2: Seat Map -->
+            <div id="seatmap-section" style="display:none">
+                <label class="seatmap-label">Pilih Kursi</label>
+
+                <div class="screen-wrap">
+                    <div class="screen-bar">LAYAR</div>
+                </div>
+
+                <div id="seat-map" class="seat-map"></div>
+
+                <div class="seat-legend">
+                    <span class="legend-item"><span class="legend-box available"></span> Tersedia</span>
+                    <span class="legend-item"><span class="legend-box selected"></span> Dipilih</span>
+                    <span class="legend-item"><span class="legend-box booked"></span> Terisi</span>
+                </div>
+
+                <p class="selected-seat-info" id="selected-seat-info">Belum ada kursi dipilih.</p>
+            </div>
+
+            <!-- Step 3: Nama -->
+            <div class="form-group" id="nama-section" style="display:none">
+                <label>Nama Pemesan</label>
+                <input type="text" id="input-nama" placeholder="Nama lengkap kamu" />
+            </div>
+
+            <button class="btn-primary" id="btn-booking" style="display:none">Pesan Sekarang</button>
+            <p id="booking-msg" class="msg"></p>
+        </div>
+    </section>
+
+    <!-- MY TICKETS -->
+    <section id="my-tickets" class="section">
+        <h2 class="section-title">Daftar Booking</h2>
+        <div id="ticket-list" class="ticket-list">
+            <p class="empty-state">Belum ada booking. Pesan tiket dulu!</p>
+        </div>
+    </section>
+
+    <!-- WAITING LIST -->
+    <section id="waiting" class="section section-dark">
+        <h2 class="section-title">Waiting List</h2>
+        <div class="form-card">
+            <div class="form-row">
+                <div class="form-group" style="flex:1">
+                    <label>Nama</label>
+                    <input type="text" id="input-waiting" placeholder="Masukkan nama kamu" />
+                </div>
+                <button class="btn-secondary" id="btn-add-waiting" style="align-self:flex-end">Daftar</button>
+                <button class="btn-outline"   id="btn-call-waiting" style="align-self:flex-end">Panggil</button>
+            </div>
+            <p id="waiting-msg" class="msg"></p>
+            <ol id="waiting-list-display" class="waiting-ol"></ol>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <span class="logo">CINEMATIX</span>
+        <p>© 2025 Cinematix. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
