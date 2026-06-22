@@ -26,15 +26,17 @@
  *  Ini sama persis dengan cara kita menyimpan data ke file .txt di app.h.
  * ============================================================================
  */
+#ifndef _WIN32_WINNT
+#define _WIN32_WINNT 0x0A00 // 0x0A00 = Windows 10
+#endif
 
- #ifndef _WIN32_WINNT
- #define _WIN32_WINNT 0x0A00
- #endif
+
  #include "httplib.h"
  #include "app.h"
  
  #include <iostream>
  #include <sstream>
+ #include <cstdlib>
  
  using namespace std;
  using namespace httplib;
@@ -66,11 +68,48 @@
  }
  
  // ============================================================================
+ // HELPER: DECODE URL ENCODING
+ // ----------------------------------------------------------------------------
+ // Browser secara otomatis mengubah karakter khusus (spasi, titik dua, dll)
+ // menjadi kode persen sebelum dikirim, contoh:
+ //      "Avengers: Doomsday"  ->  "Avengers%3A%20Doomsday"
+ // Fungsi ini mengembalikan teks tadi ke bentuk aslinya, supaya data yang
+ // disimpan ke LINKED LIST dan file .txt tetap bersih dan mudah dibaca.
+ // ============================================================================
+ 
+ string urlDecode(const string& s)
+ {
+     string hasil;
+ 
+     for (size_t i = 0; i < s.length(); i++)
+     {
+         if (s[i] == '%' && i + 2 < s.length())
+         {
+             string hex = s.substr(i + 1, 2);
+             char ch = (char) strtol(hex.c_str(), nullptr, 16);
+             hasil += ch;
+             i += 2;
+         }
+         else if (s[i] == '+')
+         {
+             hasil += ' ';
+         }
+         else
+         {
+             hasil += s[i];
+         }
+     }
+ 
+     return hasil;
+ }
+ 
+ // ============================================================================
  // HELPER: PARSING REQUEST BODY (format "key=value" dipisah "&", seperti form)
  // ----------------------------------------------------------------------------
  // Saat frontend mengirim data lewat POST, datanya berbentuk teks seperti:
  //      nama=Budi&film=Sinners&kursi=A5&harga=55000
- // Fungsi ini membaca teks tersebut dan mengambil value dari key yang diminta.
+ // Fungsi ini membaca teks tersebut dan mengambil value dari key yang diminta,
+ // lalu langsung di-decode supaya karakter seperti ":" dan spasi tidak rusak.
  // Ini PENGGANTI JSON — supaya tidak perlu library tambahan, cukup pakai
  // string processing (find, substr) yang sudah dipelajari di dasar C++.
  // ============================================================================
@@ -94,7 +133,7 @@
          value = body.substr(pos, akhir - pos);
      }
  
-     return value;
+     return urlDecode(value);
  }
  
  int getFieldInt(const string& body, const string& key)

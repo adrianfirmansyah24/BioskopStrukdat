@@ -329,15 +329,93 @@ function renderTicketList() {
             </div>
             <div class="ticket-right">
                 <span class="ticket-price">${formatRupiah(b.harga)}</span>
+                <button class="ticket-view" data-id="${b.idTiket}">Lihat Karcis</button>
                 <button class="ticket-cancel" data-id="${b.idTiket}">Batalkan</button>
             </div>
         `;
         list.appendChild(card);
     });
 
+    document.querySelectorAll(".ticket-view").forEach(btn => {
+        btn.addEventListener("click", function () { showTicketModal(this.dataset.id); });
+    });
+
     document.querySelectorAll(".ticket-cancel").forEach(btn => {
         btn.addEventListener("click", function () { cancelBooking(this.dataset.id); });
     });
+}
+
+// ===================== KARCIS / TIKET MODAL =====================
+
+function buildTicketHTML(b) {
+    return `
+        <button class="ticket-modal-close" id="ticket-modal-close">&times;</button>
+        <div class="karcis">
+            <div class="karcis-header">
+                <span class="karcis-logo">CINEMATIX</span>
+                <span class="karcis-tag">E-TICKET</span>
+            </div>
+
+            <div class="karcis-film">
+                <h3>${b.film}</h3>
+                <p>${b.studio} &nbsp;·&nbsp; ${b.jadwal}</p>
+            </div>
+
+            <div class="karcis-divider">
+                <span class="karcis-notch karcis-notch-left"></span>
+                <span class="karcis-dashed"></span>
+                <span class="karcis-notch karcis-notch-right"></span>
+            </div>
+
+            <div class="karcis-body">
+                <div class="karcis-row">
+                    <div class="karcis-field">
+                        <label>Nama</label>
+                        <span>${b.nama}</span>
+                    </div>
+                    <div class="karcis-field">
+                        <label>Kursi</label>
+                        <span class="karcis-seat">${b.kursi}</span>
+                    </div>
+                </div>
+                <div class="karcis-row">
+                    <div class="karcis-field">
+                        <label>ID Tiket</label>
+                        <span>${b.idTiket}</span>
+                    </div>
+                    <div class="karcis-field">
+                        <label>Harga</label>
+                        <span>${formatRupiah(b.harga)}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="karcis-barcode">
+                ${"▌▌▍▌▌▍▌▍▌▌▍▌▌▌▍▌▍▌▌▍▌▌▌▍▌▌▍▌▌▍▌".split("").map(c => `<span>${c}</span>`).join("")}
+            </div>
+            <p class="karcis-footer">Tunjukkan karcis ini di pintu masuk studio</p>
+        </div>
+    `;
+}
+
+function showTicketModal(idTiket) {
+    const b = bookings.find(x => x.idTiket === idTiket);
+    if (!b) return;
+
+    const overlay = document.getElementById("ticket-modal-overlay");
+    const content = document.getElementById("ticket-modal-content");
+
+    content.innerHTML = buildTicketHTML(b);
+    overlay.style.display = "flex";
+
+    document.getElementById("ticket-modal-close").addEventListener("click", hideTicketModal);
+    overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) hideTicketModal();
+    });
+}
+
+function hideTicketModal() {
+    document.getElementById("ticket-modal-overlay").style.display = "none";
 }
 
 // ===================== BOOKING ACTION =====================
@@ -353,10 +431,22 @@ document.getElementById("btn-booking").addEventListener("click", async () => {
     btn.disabled = true;
     btn.textContent = "Memproses...";
 
-    let berhasil = 0;
+    // PENTING: ambil data booking TERBARU dari server sebelum mengecek kursi.
+    // Ini mencegah kursi yang sudah dipesan orang lain (sejak halaman terakhir
+    // dimuat) ikut terpilih lagi.
+    await loadBookings();
 
-    // Kirim 1 request per kursi yang dipilih
-    for (const kursi of selectedSeats) {
+    const sudahTerisi = bookedSeatsForFilm(currentFilm.judul).map(b => b.kursi);
+    const kursiValid  = selectedSeats.filter(k => !sudahTerisi.includes(k));
+    const kursiBentrok = selectedSeats.filter(k => sudahTerisi.includes(k));
+
+    let berhasil = 0;
+    const idTiketBaru = [];
+
+    // Kirim booking SATU PER SATU secara berurutan (bukan paralel), supaya
+    // tidak ada 2 request masuk bersamaan dan lolos pengecekan kursi bentrok
+    // di server pada saat yang sama (race condition).
+    for (const kursi of kursiValid) {
         const { ok, text } = await apiPostForm("/api/bookings", {
             nama,
             film:   currentFilm.judul,
@@ -369,12 +459,15 @@ document.getElementById("btn-booking").addEventListener("click", async () => {
         const hasil = parseStatusLine(text);
         if (ok && hasil.status === "ok") {
             berhasil++;
+            idTiketBaru.push(hasil.value);
         }
     }
 
     btn.disabled = false;
     btn.textContent = "Pesan Sekarang";
 
+    // Refresh ulang state booking supaya seat map langsung menampilkan
+    // kursi yang baru saja terisi sebagai warna "booked".
     await loadBookings();
 
     selectedSeats = [];
@@ -383,12 +476,22 @@ document.getElementById("btn-booking").addEventListener("click", async () => {
     updateFilmPreview(currentFilm);
     renderTicketList();
 
-    if (berhasil > 0) {
+    if (kursiBentrok.length > 0) {
+        showMsg(
+            "booking-msg",
+            `⚠️ Kursi ${kursiBentrok.join(", ")} sudah terisi duluan. ${berhasil} tiket lainnya berhasil dipesan.`,
+            berhasil > 0 ? "success" : "error"
+        );
+    } else if (berhasil > 0) {
         const totalHarga = currentFilm.harga * berhasil;
         showMsg("booking-msg", `✅ ${berhasil} tiket berhasil dipesan! Total: ${formatRupiah(totalHarga)}`, "success");
-        document.getElementById("my-tickets").scrollIntoView({ behavior: "smooth" });
     } else {
-        showMsg("booking-msg", "Booking gagal, kursi mungkin sudah terisi. Coba refresh halaman.", "error");
+        showMsg("booking-msg", "Booking gagal. Coba refresh halaman.", "error");
+    }
+
+    if (idTiketBaru.length > 0) {
+        // Tampilkan karcis untuk tiket pertama yang berhasil dipesan
+        showTicketModal(idTiketBaru[0]);
     }
 });
 

@@ -626,3 +626,215 @@ select option { background: #1a1a1a; }
 }
 
 .selected-seat-info strong { color: var(--accent); }
+
+/* ===================== TICKET MODAL ===================== */
+
+.ticket-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.ticket-modal {
+    position: relative;
+    max-width: 420px;
+    width: 100%;
+    animation: popIn 0.25s ease-out;
+}
+
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.92) translateY(12px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.ticket-modal-close {
+    position: absolute;
+    top: -14px;
+    right: -14px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #0d0d0d;
+    border: none;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+/* ===================== KARCIS (TICKET DESIGN) ===================== */
+
+.karcis {
+    background: linear-gradient(160deg, #161616 0%, #1c1c1c 100%);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+}
+
+.karcis-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    background: var(--accent);
+    color: #0d0d0d;
+}
+
+.karcis-logo {
+    font-family: var(--font-display);
+    font-size: 20px;
+    letter-spacing: 3px;
+}
+
+.karcis-tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    background: #0d0d0d;
+    color: var(--accent);
+    padding: 4px 10px;
+    border-radius: 4px;
+}
+
+.karcis-film {
+    padding: 22px 24px 16px;
+    text-align: center;
+}
+
+.karcis-film h3 {
+    font-family: var(--font-display);
+    font-size: 26px;
+    letter-spacing: 1px;
+    color: var(--text);
+    margin-bottom: 6px;
+}
+
+.karcis-film p {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* Perforated divider with notches like a real ticket stub */
+.karcis-divider {
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 20px;
+    margin: 0 0 4px;
+}
+
+.karcis-notch {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.85);
+    position: absolute;
+    z-index: 2;
+}
+
+.karcis-notch-left  { left: -10px; }
+.karcis-notch-right { right: -10px; }
+
+.karcis-dashed {
+    flex: 1;
+    margin: 0 14px;
+    border-top: 2px dashed var(--border);
+}
+
+.karcis-body {
+    padding: 16px 24px 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.karcis-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.karcis-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.karcis-field label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.karcis-field span {
+    font-size: 15px;
+    color: var(--text);
+    font-weight: 500;
+}
+
+.karcis-field .karcis-seat {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--accent);
+    letter-spacing: 1px;
+}
+
+.karcis-barcode {
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    padding: 20px 24px 6px;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--text);
+    letter-spacing: 1px;
+    overflow: hidden;
+}
+
+.karcis-footer {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-muted);
+    padding: 0 24px 22px;
+}
+
+/* ===================== TICKET LIST: extra "Lihat Karcis" button ===================== */
+
+.ticket-view {
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: var(--font-body);
+    font-weight: 600;
+}
+
+.ticket-view:hover { background: rgba(232,200,74,0.1); }
+
+@media (max-width: 640px) {
+    .karcis-film h3 { font-size: 22px; }
+    .karcis-barcode { font-size: 16px; }
+}
